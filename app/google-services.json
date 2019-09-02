@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "737291470567",
+    "firebase_url": "https://phisycal-activity-90b75.firebaseio.com",
+    "project_id": "phisycal-activity-90b75",
+    "storage_bucket": "phisycal-activity-90b75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737291470567:android:e04446be25619079",
+        "android_client_info": {
+          "package_name": "com.danilkomyshev.phisycalactivity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "737291470567-18ahvh2j895gu2t4m47uuss8k8es9fc8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danilkomyshev.phisycalactivity",
+            "certificate_hash": "342d4924e31a5e7cde8c163f3289af4141acdb51"
+          }
+        },
+        {
+          "client_id": "737291470567-0sos4160gs0sgm4o91r84gsnsde6mbr0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4iUOua6GhYKpb-VR__XU9iFQQguAVtHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "737291470567-0sos4160gs0sgm4o91r84gsnsde6mbr0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
