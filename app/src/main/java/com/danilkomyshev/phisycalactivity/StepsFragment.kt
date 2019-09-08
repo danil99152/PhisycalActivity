@@ -101,7 +101,7 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
         linearLayout = getView()!!.findViewById(R.id.linear_layout) as LinearLayout
 
         val requestQueue = Volley.newRequestQueue(activity)
-        val url = "https://jsonplaceholder.typicode.com"
+        val url = "https://jsonplaceholder.typicode.com/users"
 
         val request = JsonObjectRequest(Request.Method.GET, url,
             Response.Listener { response ->

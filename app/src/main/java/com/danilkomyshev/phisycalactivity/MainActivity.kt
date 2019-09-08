@@ -74,7 +74,7 @@ class MainActivity:AppCompatActivity() {
          // get the information about user from server
                 // else store it in the database
                 val requestQueue = Volley.newRequestQueue(this)
-        val url = "http://ec2-52-15-146-42.us-east-2.compute.amazonaws.com/user"
+        val url = "https://jsonplaceholder.typicode.com/users"
         val jsonObject = JSONObject(user as Map<*, *>)
 
         val jsonRequest = JsonObjectRequest(url, jsonObject,
@@ -194,7 +194,7 @@ class MainActivity:AppCompatActivity() {
             while (!requestQueue.isEmpty())
             {
                 val data = requestQueue.remove()
-                val url = "http://ec2-52-15-146-42.us-east-2.compute.amazonaws.com/user/$userId/activity"
+                val url = "https://jsonplaceholder.typicode.com/users"
 
                 val body = JSONObject(data)
                 val request = JsonObjectRequest(url, body,
