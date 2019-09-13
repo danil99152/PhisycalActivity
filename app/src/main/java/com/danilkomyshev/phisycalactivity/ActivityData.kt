@@ -7,13 +7,13 @@ import com.google.android.gms.fitness.data.Field
 import com.google.android.gms.fitness.data.Value
 
 interface ActivityTrackerCallback {
-    fun onStepsChanged(value: Value?)
+    fun onStepsChanged(steps: Value?)
 
     fun onDistanceMeasured(distance: Value?)
 
     fun onError(status: Status)
 
-    fun onCaloriesChanged(data: Value?)
+    fun onCaloriesChanged(calories: Value?)
 }
 
 class ActivityData(private val googleApiClient: GoogleApiClient, private val activityTrackerCallback: ActivityTrackerCallback) {
@@ -54,7 +54,7 @@ class ActivityData(private val googleApiClient: GoogleApiClient, private val act
         }
         activities.add(activity)
 
-        return activities;
+        return activities
     }
     fun createSubscription() {
         val activities = buildFloatActivities()

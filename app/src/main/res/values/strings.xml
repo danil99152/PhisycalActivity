@@ -2,7 +2,7 @@
     <string name="app_name">Двигательная активность</string>
     <string name="preferences_file">com.danilkomyshev.physicalactivity.PREFERENCES</string>
     <string name="defaultValue">0</string>
-    <string name="burned">calories burned</string>
-    <string name="covered">total distance covered</string>
-    <string name="steps_description">steps since midnight.</string>
+    <string name="burned">калорий сожжено</string>
+    <string name="covered">пройдено дистанции</string>
+    <string name="steps_description">проделано шагов за день</string>
 </resources>

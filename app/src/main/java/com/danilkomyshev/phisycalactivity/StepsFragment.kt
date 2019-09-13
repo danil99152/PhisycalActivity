@@ -12,15 +12,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.fitness.data.Value
-import org.json.JSONException
 
 @Suppress("DEPRECATION")
 class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener {
@@ -29,7 +27,6 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
     private lateinit var stepsView: TextView
     private lateinit var distanceView: TextView
     private lateinit var caloriesView: TextView
-    private lateinit var progressBar: ProgressBar
     private lateinit var linearLayout: LinearLayout
     private var distance = "0"
     private var calories = "0"
@@ -40,21 +37,21 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
         stepsView.text = steps.toString()
     }
 
-    override fun onCaloriesChanged(data: Value?) {
-        val calString = String.format("%2.0f", data?.asFloat())
+    override fun onCaloriesChanged(calories: Value?) {
+        val calString = String.format("%2.0f", calories?.asFloat())
         setCalories(calString)
-        if (data != null) {
-            MainActivity.saveToServer("calories", "float", data.asFloat())
+        if (calories != null) {
+            MainActivity.saveToServer("calories", "float", calories.asFloat())
         }
     }
 
     override fun onDistanceMeasured(distance: Value?) {
         var dist = distance?.asFloat()
-        var unit = "m"
+        var unit = "м"
         if (dist != null) {
             if (dist - 1000 > 0) {
                 dist /= 1000
-                unit = "km"
+                unit = "км"
             }
         }
 
@@ -66,10 +63,10 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
         }
     }
 
-    override fun onStepsChanged(value: Value?) {
+    override fun onStepsChanged(steps: Value?) {
         setSteps(steps.toString().toInt())
 
-        MainActivity.saveToServer("steps", "int", steps!!.toInt())
+        MainActivity.saveToServer("steps", "int", steps!!)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -90,7 +87,7 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
         stepsView.text = steps!!.toString()
 
         distanceView = getView()!!.findViewById(R.id.distance) as TextView
-        val str = SpannableString(distance + "km")
+        val str = SpannableString(distance + "км")
         str.setSpan(ForegroundColorSpan(Color.GRAY), distance.length, str.length, distance.length)
         distanceView.text = str
 
@@ -100,31 +97,26 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
         getView()!!.findViewById(R.id.steps_desc) as TextView
         linearLayout = getView()!!.findViewById(R.id.linear_layout) as LinearLayout
 
-        val requestQueue = Volley.newRequestQueue(activity)
-        val url = "https://jsonplaceholder.typicode.com/users"
-
-        val request = JsonObjectRequest(Request.Method.GET, url,
-            Response.Listener { response ->
-                val user: User?
-                try {
-                    user = User.fromJSON(response)
-                    Log.i("Hello:", user.toString())
-                    handleUser()
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-            }, Response.ErrorListener { error ->
-                Log.i("ERROR", error.toString())
-                Toast.makeText(activity, "Could not get user info.", Toast.LENGTH_SHORT).show()
-            })
+//        val requestQueue = Volley.newRequestQueue(activity)
+//        val url = "https://jsonplaceholder.typicode.com/users"
+//
+//        val request = JsonObjectRequest(Request.Method.GET, url,
+//            Response.Listener { response ->
+//                val user: User?
+//                try {
+//                    user = User.fromJSON(response)
+//                    Log.i("Hello:", user.toString())
+//                } catch (e: JSONException) {
+//                    e.printStackTrace()
+//                }
+//            }, Response.ErrorListener { error ->
+//                Log.i("ERROR", error.toString())
+//                Toast.makeText(activity, "Could not get user info.", Toast.LENGTH_SHORT).show()
+//            })
+//        requestQueue.add(request)
 
         (view.findViewById(R.id.share_button) as ImageButton).setOnClickListener(this)
 
-        requestQueue.add(request)
-    }
-
-    private fun handleUser() {
-        progressBar.visibility = ProgressBar.GONE
     }
 
     override fun onCreateView(
@@ -132,7 +124,6 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_steps, container, false)
     }
 
@@ -140,10 +131,7 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             mListener = context
-        } //else {
-            //            throw new RuntimeException(context.toString()
-            //                    + " must implement OnFragmentInteractionListener");
-      //  }
+        }
     }
 
     private fun setDistance(distance: String, unit: String) {
@@ -163,12 +151,6 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
         caloriesView.text = calories
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     **/
     interface OnFragmentInteractionListener
 
     private fun shareScreenshot() {
@@ -194,13 +176,6 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
     companion object {
         private const val ARG_PARAM1 = "steps"
 
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param steps Parameter 1.
-         * @return A new instance of fragment StepsFragment.
-         */
         fun newInstance(steps: Long): StepsFragment {
             val fragment = StepsFragment()
             val args = Bundle()

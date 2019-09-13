@@ -2,6 +2,7 @@
 
 package com.danilkomyshev.phisycalactivity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -41,6 +42,7 @@ class MainActivity:AppCompatActivity() {
     activityData.createSubscription()
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?) {
         Log.i(TAG, "RequestCode $requestCode")
 
@@ -64,12 +66,9 @@ class MainActivity:AppCompatActivity() {
 //        val personId = acct.id
 //        val personPhoto = acct.photoUrl
 
-        val mobile = ""
         val user = HashMap<String, Any>()
             user["name"] = personName.toString()
             user["email"] = personEmail.toString()
-            user["mobile"] = mobile
-            user["gender"] = "Male"
 
          // get the information about user from server
                 // else store it in the database
@@ -82,9 +81,11 @@ class MainActivity:AppCompatActivity() {
                 try {
                     if (response.getString("status") == "SUCCESS") {
                         saveUserId(response.getInt("id"))
+                        Log.i(TAG, "SUCCESS")
                     }
                 } catch (ex:JSONException) {
                     ex.printStackTrace()
+                    Log.i(TAG, "UNSUCCESS")
                 }
             }, Response.ErrorListener { error -> Log.e(TAG, "" + error) })
 
@@ -174,7 +175,7 @@ class MainActivity:AppCompatActivity() {
         private lateinit var context : Context
 
          fun saveToServer(name:String, dataType:String, value:Any) {
-            Log.i(TAG, "Saving to server: $name")
+            Log.i(TAG, "Saving to server: $name = $value")
             val activityInfo = HashMap<String, Any>()
                  activityInfo["activity"] = name
                  activityInfo["dataType"] = dataType
@@ -194,7 +195,7 @@ class MainActivity:AppCompatActivity() {
             while (!requestQueue.isEmpty())
             {
                 val data = requestQueue.remove()
-                val url = "https://jsonplaceholder.typicode.com/users"
+                val url = "https://jsonplaceholder.typicode.com/users/$userId/activity"
 
                 val body = JSONObject(data)
                 val request = JsonObjectRequest(url, body,
