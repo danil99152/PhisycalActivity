@@ -34,6 +34,75 @@ class MainActivity:AppCompatActivity() {
     context = this
     }
 
+    companion object {
+        const val TAG = "MyApp"
+
+        private const val RC_SIGN_IN = 9001
+
+        var isReady = false
+        private var userId:Int? = 0
+        private val requestQueue = ArrayDeque<Map<String, Any>>()
+        private lateinit var context : Context
+
+        fun saveToServer(name:String, dataType:String, value:Any) {
+            Log.i(TAG, "Saving to server: $name = $value")
+            val activityInfo = HashMap<String, Any>()
+            activityInfo["activity"] = name
+            activityInfo["dataType"] = dataType
+            activityInfo["value"] = value
+
+            requestQueue.add(activityInfo)
+            if (isReady)
+            {
+                saveActivitiesToServer()
+            }
+        }
+
+        private fun saveActivitiesToServer() {
+            val q = Volley.newRequestQueue(context)
+
+
+            while (!requestQueue.isEmpty())
+            {
+                val data = requestQueue.remove()
+                val url = "https://jsonplaceholder.typicode.com/users/$userId/activity"
+
+                val body = JSONObject(data)
+                val request = JsonObjectRequest(url, body,
+                    Response.Listener<JSONObject> { response ->
+                        try {
+                            if (response.getString("status") == "SUCCESS") {
+                                Log.i(TAG, "Successfully saved activity.")
+                            } else {
+                                Log.i(TAG, "Failed to save activity.")
+                            }
+                        } catch (e:JSONException) {
+                            e.printStackTrace()
+                        }
+                    }, Response.ErrorListener { error -> Log.e(TAG, "" + error) })
+                q.add(request)
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState:Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val view = layoutInflater.inflate(R.layout.list_header, null)
+        frameLayout = findViewById(R.id.container)
+        frameLayout.addView(view)
+
+        buildFitnessClient()
+        applicationContext.assets
+
+        activityFragment = StepsFragment.newInstance(0L)
+        val fragmentManager = fragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.content, activityFragment)
+        transaction.commit()
+    }
+
     private fun subscribe() {
     activityData = ActivityData(
         googleApiClient,
@@ -144,74 +213,5 @@ class MainActivity:AppCompatActivity() {
 
     val signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient)
     this.startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
-
-    override fun onCreate(savedInstanceState:Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val view = layoutInflater.inflate(R.layout.list_header, null)
-        frameLayout = findViewById(R.id.container)
-        frameLayout.addView(view)
-
-        buildFitnessClient()
-        applicationContext.assets
-
-        activityFragment = StepsFragment.newInstance(0L)
-        val fragmentManager = fragmentManager
-        val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.content, activityFragment)
-        transaction.commit()
-    }
-
-    companion object {
-         const val TAG = "MyApp"
-
-        private const val RC_SIGN_IN = 9001
-
-        var isReady = false
-        private var userId:Int? = 0
-        private val requestQueue = ArrayDeque<Map<String, Any>>()
-        private lateinit var context : Context
-
-         fun saveToServer(name:String, dataType:String, value:Any) {
-            Log.i(TAG, "Saving to server: $name = $value")
-            val activityInfo = HashMap<String, Any>()
-                 activityInfo["activity"] = name
-                 activityInfo["dataType"] = dataType
-                 activityInfo["value"] = value
-
-            requestQueue.add(activityInfo)
-            if (isReady)
-            {
-                saveActivitiesToServer()
-            }
-        }
-
-        private fun saveActivitiesToServer() {
-            val q = Volley.newRequestQueue(context)
-
-
-            while (!requestQueue.isEmpty())
-            {
-                val data = requestQueue.remove()
-                val url = "https://jsonplaceholder.typicode.com/users/$userId/activity"
-
-                val body = JSONObject(data)
-                val request = JsonObjectRequest(url, body,
-                    Response.Listener<JSONObject> { response ->
-                        try {
-                            if (response.getString("status") == "SUCCESS") {
-                                Log.i(TAG, "Successfully saved activity.")
-                            } else {
-                                Log.i(TAG, "Failed to save activity.")
-                            }
-                        } catch (e:JSONException) {
-                            e.printStackTrace()
-                        }
-                    }, Response.ErrorListener { error -> Log.e(TAG, "" + error) })
-                q.add(request)
-            }
-        }
     }
 }

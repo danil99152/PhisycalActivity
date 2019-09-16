@@ -32,6 +32,18 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
     private var calories = "0"
     private lateinit var mListener: OnFragmentInteractionListener
 
+    companion object {
+        private const val ARG_PARAM1 = "steps"
+
+        fun newInstance(steps: Long): StepsFragment {
+            val fragment = StepsFragment()
+            val args = Bundle()
+            args.putString(ARG_PARAM1, steps.toString())
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     private fun setSteps(steps: Int) {
         this.steps = steps.toString()
         stepsView.text = steps.toString()
@@ -97,24 +109,6 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
         getView()!!.findViewById(R.id.steps_desc) as TextView
         linearLayout = getView()!!.findViewById(R.id.linear_layout) as LinearLayout
 
-//        val requestQueue = Volley.newRequestQueue(activity)
-//        val url = "https://jsonplaceholder.typicode.com/users"
-//
-//        val request = JsonObjectRequest(Request.Method.GET, url,
-//            Response.Listener { response ->
-//                val user: User?
-//                try {
-//                    user = User.fromJSON(response)
-//                    Log.i("Hello:", user.toString())
-//                } catch (e: JSONException) {
-//                    e.printStackTrace()
-//                }
-//            }, Response.ErrorListener { error ->
-//                Log.i("ERROR", error.toString())
-//                Toast.makeText(activity, "Could not get user info.", Toast.LENGTH_SHORT).show()
-//            })
-//        requestQueue.add(request)
-
         (view.findViewById(R.id.share_button) as ImageButton).setOnClickListener(this)
 
     }
@@ -170,18 +164,6 @@ class StepsFragment : Fragment(), ActivityTrackerCallback, View.OnClickListener 
                 Log.i(MainActivity.TAG, "Share button clicked.")
                 shareScreenshot()
             }
-        }
-    }
-
-    companion object {
-        private const val ARG_PARAM1 = "steps"
-
-        fun newInstance(steps: Long): StepsFragment {
-            val fragment = StepsFragment()
-            val args = Bundle()
-            args.putString(ARG_PARAM1, steps.toString())
-            fragment.arguments = args
-            return fragment
         }
     }
 }
