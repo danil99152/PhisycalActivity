@@ -25,7 +25,7 @@ class MyTextView : AppCompatTextView {
 
     private fun init() {
         if (!isInEditMode) {
-            val tf = Typeface.createFromAsset(context.assets, "Avenir-Book.otf")
+            val tf = Typeface.SANS_SERIF
             typeface = tf
         }
     }

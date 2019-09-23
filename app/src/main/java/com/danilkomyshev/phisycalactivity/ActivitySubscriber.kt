@@ -69,12 +69,5 @@ class ActivitySubscriber(private val googleApiClient: GoogleApiClient) {
                     }
                 }
             }
-
-//        val sensorRequest = SensorRequest.Builder()
-//                .setDataType(activityTrackerConfig.dataType)
-//                .setAccuracyMode(SensorRequest.ACCURACY_MODE_DEFAULT).build();
-//        Fitness.SensorsApi.add(googleApiClient, sensorRequest, {
-//            dataPoint -> readDataFromDataPoint(activityTrackerConfig, dataPoint)
-//        })
     }
 }
